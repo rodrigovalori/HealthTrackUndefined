@@ -101,15 +101,27 @@ public class AtividadeFisicaDAO implements IDataHandler<AtividadeFisica> {
 			stmt.setInt(1, id);
 			ResultSet result = null;
 			result = dao.getData(stmt);
-			while (result.next()) {
-				AtividadeFisica atividadeFisica = new AtividadeFisica();
-				atividadeFisica.setCodAtividadeFisica(result.getInt("CD_ATIVIDADE_FISICA"));
-				atividadeFisica.setEnergiaKcalAtividadeFisica(result.getDouble("NR_GASTO_KCAL"));
-				atividadeFisica.setDataHoraInicioAtividadeFisica(result.getTimestamp("HR_INICIO"));
-				atividadeFisica.setDataHoraTerminoAtividadeFisica(result.getTimestamp("HR_TERMINO"));
-				atividadeFisica.setDescricaoAtividadeFisica(result.getString("DS_ATIVIDADE_FISICA"));
-				return atividadeFisica;
-			}
+			int codAtividadeFisica = result.getInt("CD_ATIVIDADE_FISICA");
+			int energiaKcalAtividadeFisica = result.getInt("NR_GASTO_KCAL");
+
+			java.sql.Date dateInicio = result.getDate("HR_INICIO");
+			DateFormat dfInicio = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			Calendar caInicio = Calendar.getInstance();
+			caInicio.setTimeInMillis(dateInicio.getTime());
+			String dataHoraAtividadeFisicaInicio = dfInicio.format(dateInicio.getTime());
+
+			java.sql.Date dateTermino = result.getDate("HR_TERMINO");
+			DateFormat dfTermino = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			Calendar caTermino = Calendar.getInstance();
+			caTermino.setTimeInMillis(dateTermino.getTime());
+			String dataHoraAtividadeFisicaTermino = dfTermino.format(dateTermino.getTime());
+
+			String descricaoAtividadeFisica = result.getString("DS_ATIVIDADE_FISICA");
+
+			AtividadeFisica atividadeFisica = new AtividadeFisica(codAtividadeFisica, energiaKcalAtividadeFisica,
+					dataHoraAtividadeFisicaInicio, dataHoraAtividadeFisicaTermino, descricaoAtividadeFisica);
+			return atividadeFisica;
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -139,11 +151,14 @@ public class AtividadeFisicaDAO implements IDataHandler<AtividadeFisica> {
 
 		try {
 			PreparedStatement stmt = dao.getConnection().prepareStatement(
-					"UPDATE T_ALIMENTO SET NR_GASTO_KCAL = ?, HR_INICIO = ?, HR_TERMINO = ?, DS_ATIVIDADE_FISICA = ? WHERE CD_ATIVIDADE_FISICA = ?");
+					"UPDATE T_ATIVIDADE_FISICA SET NR_GASTO_KCAL = ?, HR_INICIO = ?, HR_TERMINO = ?, DS_ATIVIDADE_FISICA = ? WHERE CD_ATIVIDADE_FISICA = ?");
 			stmt.setDouble(1, obj.getEnergiaKcalAtividadeFisica());
-			stmt.setTimestamp(2, obj.getDataHoraInicioAtividadeFisica());
-			stmt.setTimestamp(3, obj.getDataHoraTerminoAtividadeFisica());
+			java.sql.Date dataHoraInicio = new java.sql.Date(obj.getDataHoraInicioAtividadeFisica().getTimeInMillis());
+			stmt.setDate(2, dataHoraInicio);
+			java.sql.Date dataHoraTermino = new java.sql.Date(obj.getDataHoraInicioAtividadeFisica().getTimeInMillis());
+			stmt.setDate(3, dataHoraTermino);
 			stmt.setString(4, obj.getDescricaoAtividadeFisica());
+			stmt.setInt(5, obj.getCodAtividadeFisica());
 
 			return dao.executeCommand(stmt);
 
@@ -189,6 +204,12 @@ public class AtividadeFisicaDAO implements IDataHandler<AtividadeFisica> {
 	public Usuario getIdByEmailAndPassword(String email, String password) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int add(AtividadeFisica obj, int userId) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

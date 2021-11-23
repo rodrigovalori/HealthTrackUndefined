@@ -57,6 +57,13 @@
 		</table>
 
 	</div>
+
+	<div class="mt-4 d-flex justify-content-center align-items-center">
+		<form action="cadastrarPressaoArterial" method="get">
+			<input id="voltar" type="submit" value="Voltar"
+				class="btn btn-dark me-4" />
+		</form>
+	</div>
 </body>
 
 </html>

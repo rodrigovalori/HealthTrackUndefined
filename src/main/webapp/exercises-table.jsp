@@ -6,7 +6,7 @@
 
 <jsp:useBean id="listaAtividadeFisica" class="java.util.ArrayList"
 	scope="request"></jsp:useBean>
-	
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -26,7 +26,7 @@
 </head>
 
 <body>
-<div class="container">
+	<div class="container">
 
 		<h1 class="mt-5 mb-4">Histórico de Exercícios</h1>
 
@@ -58,6 +58,13 @@
 			</tbody>
 		</table>
 
+	</div>
+
+	<div class="mt-4 d-flex justify-content-center align-items-center">
+		<form action="cadastrarAtividadeFisica" method="get">
+			<input id="voltar" type="submit" value="Voltar"
+				class="btn btn-dark me-4" />
+		</form>
 	</div>
 </body>
 
