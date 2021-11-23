@@ -128,10 +128,10 @@ public class PesoDAO implements IDataHandler<Peso> {
 			PreparedStatement stmt = dao.getConnection().prepareStatement(
 					"UPDATE T_PESO SET DT_PESAGEM = ?, NR_PESO = ?, CD_USUARIO = ? WHERE CD_PESAGEM = ?");
 			java.sql.Date dataHoraPesagem = new java.sql.Date(obj.getDataPesagem().getTimeInMillis());
-			stmt.setDate(2, dataHoraPesagem);
+			stmt.setDate(1, dataHoraPesagem);
 			stmt.setDouble(2, obj.getPeso());
-			stmt.setInt(3, obj.getCodPesagem());
-			stmt.setInt(4, 1);
+			stmt.setInt(3, 1);
+			stmt.setInt(4, obj.getCodPesagem());
 
 			return dao.executeCommand(stmt);
 
