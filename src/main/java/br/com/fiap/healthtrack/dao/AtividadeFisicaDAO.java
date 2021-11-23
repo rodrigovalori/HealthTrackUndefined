@@ -9,15 +9,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import br.com.fiap.healthtrack.model.Alimento;
 import br.com.fiap.healthtrack.model.AtividadeFisica;
-import br.com.fiap.healthtrack.model.Peso;
-import br.com.fiap.healthtrack.model.PressaoArterial;
-import br.com.fiap.healthtrack.model.Usuario;
 
-public class AtividadeFisicaDAO implements IDataHandler<AtividadeFisica> {
+public class AtividadeFisicaDAO {
 
-	@Override
 	public List<AtividadeFisica> getAll() {
 
 		DAO dao = new DAO();
@@ -61,7 +56,6 @@ public class AtividadeFisicaDAO implements IDataHandler<AtividadeFisica> {
 		return null;
 	}
 
-	@Override
 	public int add(AtividadeFisica obj) {
 
 		DAO dao = new DAO();
@@ -90,7 +84,6 @@ public class AtividadeFisicaDAO implements IDataHandler<AtividadeFisica> {
 		return 0;
 	}
 
-	@Override
 	public AtividadeFisica getById(int id) {
 		DAO dao = new DAO();
 		PreparedStatement stmt;
@@ -129,7 +122,6 @@ public class AtividadeFisicaDAO implements IDataHandler<AtividadeFisica> {
 		return null;
 	}
 
-	@Override
 	public int delete(int id) {
 		DAO dao = new DAO();
 
@@ -145,7 +137,6 @@ public class AtividadeFisicaDAO implements IDataHandler<AtividadeFisica> {
 		return 0;
 	}
 
-	@Override
 	public int update(AtividadeFisica obj) {
 		DAO dao = new DAO();
 
@@ -167,48 +158,6 @@ public class AtividadeFisicaDAO implements IDataHandler<AtividadeFisica> {
 			e.printStackTrace();
 		}
 
-		return 0;
-	}
-
-	@Override
-	public Usuario getByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Usuario getIdByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int add(Alimento obj, int userId) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int add(Peso obj, int userId) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int add(PressaoArterial obj, int userId) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Usuario getIdByEmailAndPassword(String email, String password) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int add(AtividadeFisica obj, int userId) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

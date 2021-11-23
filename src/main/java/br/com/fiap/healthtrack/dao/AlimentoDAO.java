@@ -10,14 +10,9 @@ import java.util.Calendar;
 import java.util.List;
 
 import br.com.fiap.healthtrack.model.Alimento;
-import br.com.fiap.healthtrack.model.AtividadeFisica;
-import br.com.fiap.healthtrack.model.Peso;
-import br.com.fiap.healthtrack.model.PressaoArterial;
-import br.com.fiap.healthtrack.model.Usuario;
 
-public class AlimentoDAO implements IDataHandler<Alimento> {
+public class AlimentoDAO {
 
-	@Override
 	public List<Alimento> getAll() {
 
 		DAO dao = new DAO();
@@ -55,7 +50,6 @@ public class AlimentoDAO implements IDataHandler<Alimento> {
 		return null;
 	}
 
-	@Override
 	public int add(Alimento obj) {
 
 		DAO dao = new DAO();
@@ -78,7 +72,6 @@ public class AlimentoDAO implements IDataHandler<Alimento> {
 		return 0;
 	}
 
-	@Override
 	public Alimento getById(int id) {
 
 		DAO dao = new DAO();
@@ -113,7 +106,6 @@ public class AlimentoDAO implements IDataHandler<Alimento> {
 		return null;
 	}
 
-	@Override
 	public int delete(int id) {
 
 		DAO dao = new DAO();
@@ -154,48 +146,6 @@ public class AlimentoDAO implements IDataHandler<Alimento> {
 		}
 
 		return 0;
-	}
-
-	@Override
-	public Usuario getByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Usuario getIdByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int add(AtividadeFisica obj, int userId) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int add(Alimento obj, int userId) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int add(Peso obj, int userId) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int add(PressaoArterial obj, int userId) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Usuario getIdByEmailAndPassword(String email, String password) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
