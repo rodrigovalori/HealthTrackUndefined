@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import br.com.fiap.healthtrack.model.Alimento;
+import br.com.fiap.healthtrack.model.AtividadeFisica;
+import br.com.fiap.healthtrack.model.Peso;
 import br.com.fiap.healthtrack.model.PressaoArterial;
+import br.com.fiap.healthtrack.model.Usuario;
 
 public class PressaoArterialDAO implements IDataHandler<PressaoArterial> {
 
@@ -84,7 +88,13 @@ public class PressaoArterialDAO implements IDataHandler<PressaoArterial> {
 			while (result.next()) {
 				PressaoArterial pressaoArterial = new PressaoArterial();
 				pressaoArterial.setCodMedicao(result.getInt("CD_MEDICAO"));
-				pressaoArterial.setDataMedicao(result.getTimestamp("DT_MEDICAO"));
+
+				java.sql.Date date = result.getDate("DT_MEDICAO");
+				DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+				Calendar ca = Calendar.getInstance();
+				ca.setTimeInMillis(date.getTime());
+				String dataHoraMedicao = df.format(date.getTime());
+
 				pressaoArterial.setPressaoSistolica(result.getInt("NR_SISTOLICA"));
 				pressaoArterial.setPressaoDiastolica(result.getInt("NR_DIASTOLICA"));
 				return pressaoArterial;
@@ -115,8 +125,67 @@ public class PressaoArterialDAO implements IDataHandler<PressaoArterial> {
 
 	@Override
 	public int update(PressaoArterial obj) {
+		DAO dao = new DAO();
+
+		try {
+			PreparedStatement stmt = dao.getConnection().prepareStatement(
+					"UPDATE T_PRESSAO_ARTERIAL SET DT_MEDICAO = ?, NR_SISTOLICA = ?, NR_DIASTOLICA = ?, CD_USUARIO = ? WHERE CD_MEDICAO = ?");
+			java.sql.Date dataHoraPesagem = new java.sql.Date(obj.getDataMedicao().getTimeInMillis());
+			stmt.setDate(1, dataHoraPesagem);
+			stmt.setDouble(2, obj.getPressaoSistolica());
+			stmt.setInt(3, obj.getPressaoDiastolica());
+			stmt.setInt(4, 1);
+			stmt.setInt(5, obj.getCodMedicao());
+
+			return dao.executeCommand(stmt);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public Usuario getByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Usuario getIdByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int add(AtividadeFisica obj, int userId) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public int add(Alimento obj, int userId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int add(Peso obj, int userId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int add(PressaoArterial obj, int userId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Usuario getIdByEmailAndPassword(String email, String password) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

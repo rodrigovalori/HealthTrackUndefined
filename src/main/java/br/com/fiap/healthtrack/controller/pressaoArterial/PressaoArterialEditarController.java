@@ -1,6 +1,9 @@
 package br.com.fiap.healthtrack.controller.pressaoArterial;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -35,7 +38,6 @@ public class PressaoArterialEditarController extends HttpServlet {
 
 		request.setAttribute("pressaoArterial", pressaoArterial);
 
-		// ARRUMAR JSP: edit-pressure.jsp
 		RequestDispatcher rd = request.getRequestDispatcher("edit-pressure.jsp");
 		rd.forward(request, response);
 	}
@@ -44,25 +46,31 @@ public class PressaoArterialEditarController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		PressaoArterial pressaoArterial = new PressaoArterial();
+		pressaoArterial.setCodMedicao(codMedicao);
+
+		SimpleDateFormat formatPressao = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		Calendar dataHoraMedicao = Calendar.getInstance();
 		try {
-			PressaoArterial pressaoArterial = new PressaoArterial();
-			pressaoArterial.setCodMedicao(codMedicao);
-			pressaoArterial.setDataMedicao(request.getParameter("data-medicao"));
-			pressaoArterial.setPressaoSistolica(Integer.parseInt(request.getParameter("pressao-sistolica")));
-			pressaoArterial.setPressaoDiastolica(Integer.parseInt(request.getParameter("pressao-diastolica")));
-
-			PressaoArterialBusiness pa = new PressaoArterialBusiness();
-			pa.editar(pressaoArterial);
-
-			List<PressaoArterial> listaPressaoArterial = pa.listarTodos();
-
-			request.setAttribute("listaPressaoArterial", listaPressaoArterial);
-			RequestDispatcher rd = request.getRequestDispatcher("pressure-table.jsp");
-			rd.forward(request, response);
-			
-		} catch (Exception e) {
+			dataHoraMedicao.setTime(formatPressao.parse(request.getParameter("data-hora-medicao")));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-
 		}
+		pressaoArterial.setDataMedicao(dataHoraMedicao);
+
+		pressaoArterial.setPressaoSistolica(Integer.parseInt(request.getParameter("pressao-sistolica")));
+		pressaoArterial.setPressaoDiastolica(Integer.parseInt(request.getParameter("pressao-diastolica")));
+
+		PressaoArterialBusiness pab = new PressaoArterialBusiness();
+		pab.editar(pressaoArterial);
+		
+		PressaoArterialBusiness pressaoArterialBusiness = new PressaoArterialBusiness();
+		List<PressaoArterial> listaPressoes = pressaoArterialBusiness.listarTodos();
+
+		request.setAttribute("listaPressoes", listaPressoes);
+		RequestDispatcher rd = request.getRequestDispatcher("pressure-table.jsp");
+		rd.forward(request, response);
+
 	}
 }
