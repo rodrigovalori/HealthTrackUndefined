@@ -30,7 +30,6 @@ public class DAO {
 	private void openConnection() {
 
 		try {
-			System.out.println("Antesssss");
 			this.connection = DriverManager.getConnection("jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL", "RM87129",
 					"060899");
 			System.out.println("AA: " + this.connection );
