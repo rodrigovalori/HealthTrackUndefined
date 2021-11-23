@@ -22,12 +22,12 @@
 	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
 	crossorigin="anonymous">
 
-<title>Editar Atividade Física</title>
+<title>Editar - Atividade Física</title>
 </head>
 <body>
 
 	<div class="container">
-		<h1 class="mt-5 mb-4">Editar Atividade Física</h1>
+		<h1 class="mt-5 mb-4">Editar - Atividade Física</h1>
 		<form action="editarAtividadeFisica" method="post">
 			<div class="d-flex flex-column bd-highlight mb-3 col-sm-7">
 				<label for="id-descricao-atividade" class="mt-3">Descrição

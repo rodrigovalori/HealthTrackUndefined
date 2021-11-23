@@ -1,6 +1,9 @@
 package br.com.fiap.healthtrack.controller.alimento;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -29,13 +32,12 @@ public class AlimentoEditarController extends HttpServlet {
 
 		int codigo = Integer.parseInt(request.getParameter("id"));
 
-		Alimento alimento = new AlimentoBusiness().pesquisarPorId(codigo);
+		Alimento Alimento = new AlimentoBusiness().pesquisarPorId(codigo);
 
-		codAlimento = alimento.getCodAlimento();
+		codAlimento = codigo;
 
-		request.setAttribute("alimento", alimento);
+		request.setAttribute("Alimento", Alimento);
 
-		// ARRUMAR JSP: edit-food.jsp
 		RequestDispatcher rd = request.getRequestDispatcher("edit-food.jsp");
 		rd.forward(request, response);
 	}
@@ -44,26 +46,33 @@ public class AlimentoEditarController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		Alimento alimento = new Alimento();
+		alimento.setCodAlimento(codAlimento);
+		alimento.setNomeAlimento(request.getParameter("nome-alimento"));
+
+		SimpleDateFormat formatDataHoraAlimento = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		Calendar dataHoraAlimento = Calendar.getInstance();
 		try {
-			Alimento alimento = new Alimento();
-			alimento.setCodAlimento(codAlimento);
-			alimento.setNomeAlimento(request.getParameter("nome-alimento"));
-			alimento.setDataHoraAlimento(request.getParameter("hora-inicio"));
-			alimento.setEnergiaKcalAlimento(Double.valueOf(request.getParameter("calorias-alimento")));
-			alimento.setDescricaoAlimento(request.getParameter("descricao-alimento"));
-
-			AlimentoBusiness a = new AlimentoBusiness();
-			a.editar(alimento);
-
-			List<Alimento> listaAlimento = a.listarTodos();
-
-			request.setAttribute("listaAlimento", listaAlimento);
-			RequestDispatcher rd = request.getRequestDispatcher("food-table.jsp");
-			rd.forward(request, response);
-
-		} catch (Exception e) {
+			dataHoraAlimento.setTime(formatDataHoraAlimento.parse(request.getParameter("hora-alimento")));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-
 		}
+		alimento.setDataHoraAlimento(dataHoraAlimento);
+
+		alimento.setEnergiaKcalAlimento(Double.valueOf(request.getParameter("calorias-alimento")));
+		alimento.setQuantidadeAlimento(Double.valueOf(request.getParameter("quantidade-alimento")));
+
+		AlimentoBusiness ab = new AlimentoBusiness();
+		ab.editar(alimento);
+
+		AlimentoBusiness alimentoBusiness = new AlimentoBusiness();
+		List<Alimento> listaAlimentos = alimentoBusiness.listarTodos();
+
+		request.setAttribute("listaAlimentos", listaAlimentos);
+		RequestDispatcher rd = request.getRequestDispatcher("food-table.jsp");
+		rd.forward(request, response);
+
 	}
+
 }

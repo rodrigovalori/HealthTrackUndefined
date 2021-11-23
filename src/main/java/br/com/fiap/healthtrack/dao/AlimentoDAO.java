@@ -10,6 +10,9 @@ import java.util.Calendar;
 import java.util.List;
 
 import br.com.fiap.healthtrack.model.Alimento;
+import br.com.fiap.healthtrack.model.AtividadeFisica;
+import br.com.fiap.healthtrack.model.Peso;
+import br.com.fiap.healthtrack.model.PressaoArterial;
 import br.com.fiap.healthtrack.model.Usuario;
 
 public class AlimentoDAO implements IDataHandler<Alimento> {
@@ -86,15 +89,23 @@ public class AlimentoDAO implements IDataHandler<Alimento> {
 			stmt.setInt(1, id);
 			ResultSet result = null;
 			result = dao.getData(stmt);
-			while (result.next()) {
-				Alimento alimento = new Alimento();
-				alimento.setNomeAlimento(result.getString("NM_ALIMENTO"));
-				alimento.setCodAlimento(result.getInt("CD_ALIMENTO"));
-				alimento.setDataHoraAlimento(result.getTimestamp("DT_ALIMENTO"));
-				alimento.setEnergiaKcalAlimento(result.getDouble("NR_KCAL"));
-				alimento.setQuantidadeAlimento(result.getDouble("NR_GRAMAS"));
-				return alimento;
-			}
+
+			String nomeAlimento = result.getString("NM_ALIMENTO");
+			int codAlimento = result.getInt("CD_ALIMENTO");
+
+			java.sql.Date date = result.getDate("DT_ALIMENTO");
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			Calendar ca = Calendar.getInstance();
+			ca.setTimeInMillis(date.getTime());
+			String dataHoraAlimento = df.format(date.getTime());
+
+			Double energiaKcalAlimento = result.getDouble("NR_KCAL");
+			Double quantidadeAlimento = result.getDouble("NR_GRAMAS");
+
+			Alimento alimento = new Alimento(codAlimento, nomeAlimento, dataHoraAlimento, energiaKcalAlimento,
+					quantidadeAlimento);
+			return alimento;
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -119,7 +130,7 @@ public class AlimentoDAO implements IDataHandler<Alimento> {
 		return 0;
 	}
 
-	public int update(Alimento obj, Usuario usuario) {
+	public int update(Alimento obj) {
 
 		DAO dao = new DAO();
 
@@ -127,11 +138,12 @@ public class AlimentoDAO implements IDataHandler<Alimento> {
 			PreparedStatement stmt = dao.getConnection().prepareStatement(
 					"UPDATE T_ALIMENTO SET CD_ALIMENTO = ?, DT_ALIMENTO = ?, NM_ALIMENTO = ?, NR_KCAL = ?, NR_GRAMAS = ?, CD_USUARIO = ? WHERE CD_ALIMENTO = ?");
 			stmt.setInt(1, obj.getCodAlimento());
-			stmt.setTimestamp(2, obj.getDataHoraAlimento());
+			java.sql.Date dataHora = new java.sql.Date(obj.getDataHoraAlimento().getTimeInMillis());
+			stmt.setDate(2, dataHora);
 			stmt.setString(3, obj.getNomeAlimento());
 			stmt.setDouble(4, obj.getEnergiaKcalAlimento());
 			stmt.setDouble(5, obj.getQuantidadeAlimento());
-			stmt.setInt(6, usuario.getCodUsuario());
+			stmt.setInt(6, 1);
 			stmt.setInt(7, obj.getCodAlimento());
 
 			return dao.executeCommand(stmt);
@@ -145,9 +157,45 @@ public class AlimentoDAO implements IDataHandler<Alimento> {
 	}
 
 	@Override
-	public int update(Alimento obj) {
+	public Usuario getByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Usuario getIdByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int add(AtividadeFisica obj, int userId) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public int add(Alimento obj, int userId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int add(Peso obj, int userId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int add(PressaoArterial obj, int userId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Usuario getIdByEmailAndPassword(String email, String password) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
