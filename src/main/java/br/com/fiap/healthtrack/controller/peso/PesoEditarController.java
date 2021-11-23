@@ -1,6 +1,9 @@
 package br.com.fiap.healthtrack.controller.peso;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -35,7 +38,6 @@ public class PesoEditarController extends HttpServlet {
 
 		request.setAttribute("peso", peso);
 
-		// ARRUMAR JSP: edit-weight.jsp
 		RequestDispatcher rd = request.getRequestDispatcher("edit-weight.jsp");
 		rd.forward(request, response);
 	}
@@ -44,24 +46,29 @@ public class PesoEditarController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		Peso peso = new Peso();
+		peso.setCodPesagem(codPesagem);
+
+		SimpleDateFormat formatPeso = new SimpleDateFormat("dd/MM/yyyy");
+		Calendar dataPesagem = Calendar.getInstance();
 		try {
-			Peso peso = new Peso();
-			peso.setCodPesagem(codPesagem);
-			peso.setDataPesagem(request.getParameter("data-pesagem"));
-			peso.setPeso(Double.valueOf(request.getParameter("peso")));
-
-			PesoBusiness p = new PesoBusiness();
-			p.editar(peso);
-
-			List<Peso> listaPeso = p.listarTodos();
-
-			request.setAttribute("listaPeso", listaPeso);
-			RequestDispatcher rd = request.getRequestDispatcher("weight-table.jsp");
-			rd.forward(request, response);
-			
-		} catch (Exception e) {
+			dataPesagem.setTime(formatPeso.parse(request.getParameter("data-pesagem")));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-
 		}
+		peso.setDataPesagem(dataPesagem);
+		peso.setPeso(Double.valueOf(request.getParameter("peso")));
+
+		PesoBusiness pb = new PesoBusiness();
+		pb.editar(peso);
+
+		PesoBusiness pesoBusiness = new PesoBusiness();
+		List<Peso> listaPesos = pesoBusiness.listarTodos();
+
+		request.setAttribute("listaPesos", listaPesos);
+		RequestDispatcher rd = request.getRequestDispatcher("weight-table.jsp");
+		rd.forward(request, response);
+
 	}
 }

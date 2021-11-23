@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import br.com.fiap.healthtrack.model.Alimento;
+import br.com.fiap.healthtrack.model.AtividadeFisica;
 import br.com.fiap.healthtrack.model.Peso;
+import br.com.fiap.healthtrack.model.PressaoArterial;
+import br.com.fiap.healthtrack.model.Usuario;
 
 public class PesoDAO implements IDataHandler<Peso> {
 
@@ -70,6 +74,7 @@ public class PesoDAO implements IDataHandler<Peso> {
 
 	@Override
 	public Peso getById(int id) {
+
 		DAO dao = new DAO();
 		PreparedStatement stmt;
 
@@ -79,10 +84,18 @@ public class PesoDAO implements IDataHandler<Peso> {
 			ResultSet result = null;
 			result = dao.getData(stmt);
 			while (result.next()) {
-				Peso peso = new Peso();
-				peso.setCodPesagem(result.getInt("CD_PESAGEM"));
-				peso.setDataPesagem(result.getTimestamp("DT_PESAGEM"));
-				peso.setPeso(result.getDouble("NR_PESO"));
+				int codPesagem = result.getInt("CD_PESAGEM");
+
+				java.sql.Date date = result.getDate("DT_PESAGEM");
+				DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+				Calendar ca = Calendar.getInstance();
+				ca.setTimeInMillis(date.getTime());
+				String dataHoraPesagem = df.format(date.getTime());
+
+				Double numeroPeso = result.getDouble("NR_PESO");
+
+				Peso peso = new Peso(codPesagem, dataHoraPesagem, numeroPeso);
+
 				return peso;
 			}
 		} catch (SQLException e) {
@@ -112,11 +125,13 @@ public class PesoDAO implements IDataHandler<Peso> {
 		DAO dao = new DAO();
 
 		try {
-			PreparedStatement stmt = dao.getConnection()
-					.prepareStatement("UPDATE T_PESO SET DT_PESAGEM = ?, NR_PESO = ? WHERE CD_PESAGEM = ?");
-			stmt.setTimestamp(1, obj.getDataPesagem());
+			PreparedStatement stmt = dao.getConnection().prepareStatement(
+					"UPDATE T_PESO SET DT_PESAGEM = ?, NR_PESO = ?, CD_USUARIO = ? WHERE CD_PESAGEM = ?");
+			java.sql.Date dataHoraPesagem = new java.sql.Date(obj.getDataPesagem().getTimeInMillis());
+			stmt.setDate(2, dataHoraPesagem);
 			stmt.setDouble(2, obj.getPeso());
 			stmt.setInt(3, obj.getCodPesagem());
+			stmt.setInt(4, 1);
 
 			return dao.executeCommand(stmt);
 
@@ -125,6 +140,48 @@ public class PesoDAO implements IDataHandler<Peso> {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+
+	@Override
+	public Usuario getByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Usuario getIdByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int add(AtividadeFisica obj, int userId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int add(Alimento obj, int userId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int add(Peso obj, int userId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int add(PressaoArterial obj, int userId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Usuario getIdByEmailAndPassword(String email, String password) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
